@@ -57,3 +57,7 @@
     -moz-appearance: textfield;
   }
 }
+
+body {
+  user-select: none;
+}
