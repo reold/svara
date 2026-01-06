@@ -69,38 +69,6 @@ JioSaavnSource.helpers.decryptURL = (
   ];
 };
 
-JioSaavnSource.helpers.fetchLibrary = async (sessionToken: string) => {
-  const authenticatedHeaders = {
-    ...JioSaavnSource.headers,
-    // Cookie: {
-    //   ...JioSaavnSource.headers.Cookie,
-    //   I: "KiSvQ51qyvPP3%2BlNFw8bNzBeraxfl%2FsgPYea5FJuOfoiGxtz4HzvNkh7s0XL2KeO0SvzriK%2F%2FvJu%2B0TeJLbnx2HP8fFR6TdJVFXfkt4DLmMaVdwF1r9O9wuHIhZUzcgGa4qKL9e1eQdNNRsyHkFK1oPdf3AV9E17HA12%2BZMnC1bZJNwiQo2%2BoFqg%2F%2FLVlN6MBiukz01eGRqW2uthbZXLufT%2FnIkDeelVQ%2FJHE0m4OVIUtBdqsSazT6rBuLgWLdNaDghnjdsgtRJvqwIj2zQsova0gmeWC79w6ZCoNGlGfjiOZqxOh3zbAp9iDfXQRTsxAecoxBsHPEoMJUQBoZ1PKA%3D%3D",
-    //   network: "google",
-    //   BH: "BEOD17852H0008%3A1743643586",
-    //   did: "did_v1_79D9162F-4F77-4B42-8D86-5EC214467860",
-    //   CH: "G03%2CA07%2CO00%2CL03",
-    //   B: "dd4caaf111e74cc6c121bd5f81c9905c",
-    //   CT: "MTk3MDYzODc0NQ==",
-    // },
-    Cookie: `ssid=did_v1_79D9162F-4F77-4B42-8D86-5EC214467860.1741341828.673173; _pl=iphoneapp-; I=${decodeURIComponent(
-      "SLCIdaC3Pwa5slQDrYdXuNljlkFgcTbQMkQY5netgFwiGxtz4HzvNkh7s0XL2KeO0SvzriK//vJu+0TeJLbnx2HP8fFR6TdJVFXfkt4DLmMaVdwF1r9O9wuHIhZUzcgGa4qKL9e1eQdNNRsyHkFK1oPdf3AV9E17HA12+ZMnC1bZJNwiQo2+oMowyPQv80EwNAhd7qIZkKCW2uthbZXLufT/nIkDeelVQ/JHE0m4OVIUtBdqsSazT6rBuLgWLdNaDghnjdsgtRJvqwIj2zQsova0gmeWC79w6ZCoNGlGfjiOZqxOh3zbAp9iDfXQRTsxn181HjE4AvH9HuuKZlFwCQ=="
-    )};`,
-    "User-Agent": "Saavn/9.16.1 (iPhone; iOS 18.4; Scale/3.00)",
-    // Cookie: `I=${encodeURIComponent(sessionToken)};`,
-  };
-
-  // console.info("sending with headers", authenticatedHeaders);
-
-  let data = await dataFetch(
-    `${PROXY_URL}${encodeURIComponent(
-      `https://wwww.saavn.com/api.php?_marker=false&_format=json&api_version=4&cc=91&__call=library.getAll&move_artist_pref=true`
-    )}`,
-    JSON.stringify({ headers: authenticatedHeaders, method: "GET" })
-  );
-
-  return data;
-};
-
 JioSaavnSource.helpers.toTrackT = async (
   track
 ): Promise<TrackT | undefined> => {
