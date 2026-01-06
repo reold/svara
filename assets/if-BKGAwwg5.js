@@ -1,0 +1,1 @@
+import{Y as E,Z as I,ac as i,a0 as u,ad as o,az as N}from"./index-ClIfrXic.js";function m(_,b,[c,h]=[0,0]){var n=_,a=null,e=null,f=N,v=c>0?I:0,s=!1;const p=(r,l=!0)=>{s=!0,t(l,r)},t=(r,l)=>{f!==(f=r)&&(f?(a?i(a):l&&(a=u(()=>l(n))),e&&o(e,()=>{e=null})):(e?i(e):l&&(e=u(()=>l(n,[c+1,h]))),a&&o(a,()=>{a=null})))};E(()=>{s=!1,b(p),s||t(null,null)},v)}export{m as i};
