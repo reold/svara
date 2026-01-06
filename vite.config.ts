@@ -479,7 +479,7 @@ export default defineConfig(({ mode }) => {
         registerType: "autoUpdate",
         strategies: "generateSW",
         devOptions: {
-          enabled: true,
+          enabled: false,
         },
       }),
     ],
