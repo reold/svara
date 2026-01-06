@@ -11,7 +11,26 @@
   let searchRes = $state({ loading: false } as {
     loading: boolean;
     query: string;
-    songs: {
+    playlists?: {
+      query: string;
+      total: number;
+      results: {
+        id: string;
+        primaryArtists: string;
+        title: string;
+        subtitle: string;
+        image: string;
+        perma_url: string;
+        more_info: {
+          language: string;
+          song_count: string;
+          firstname: string;
+          lastname: string;
+        };
+      };
+    };
+    songs?: {
+      query: string;
       total: number;
       results: {
         id: string;
@@ -33,7 +52,10 @@
     };
   });
 
-  let searchText: string = $state("");
+  let searchOpts = $state({
+    text: "",
+    kind: "track" as "track" | "playlist",
+  });
   let showClearText: boolean = $state(false);
   let inputValue = $state("");
 
@@ -88,36 +110,58 @@
   }
 
   const handleSearch = () => {
-    let query = searchText;
+    let query = searchOpts.text;
 
     // exit if query is empty, less than 3 characters or is the current result
+    if (!query || query.length < 3) return;
+
     if (
-      !query ||
-      query.length < 3 ||
-      (searchRes.query && query == searchRes.query)
+      searchOpts.kind == "playlist" &&
+      searchRes.playlists &&
+      searchRes.playlists?.query == query
+    )
+      return;
+    if (
+      searchOpts.kind == "track" &&
+      searchRes.songs &&
+      searchRes.songs?.query == query
     )
       return;
 
     searchRes.loading = true;
 
     fetchWithCustomCache(
-      `search-${query}`,
+      `search-${searchOpts.kind}-${query}`,
       () => {
-        return JioSaavnSource.query(query);
+        return JioSaavnSource.query(query, { kind: searchOpts.kind });
       },
       60 * 60 * 1000
     ).then((data) => {
-      data.results = data.results.map((song: { image: string }) => {
-        song.image = song.image.replace("http://", "https://");
-        return song;
+      data.results = data.results.map((item: { image: string }) => {
+        item.image = item.image.replace("http://", "https://");
+        return item;
       });
       searchRes.query = query;
-      searchRes.songs = data;
+
+      switch (searchOpts.kind) {
+        case "playlist":
+          searchRes.playlists = { ...data, query };
+          break;
+        case "track":
+          searchRes.songs = { ...data, query };
+          break;
+      }
       searchRes.loading = false;
+      // console.info(JSON.stringify(searchRes));
     });
   };
 
   const handleThrottledSearch = throttleFunc(handleSearch, 1000);
+
+  $effect(() => {
+    searchOpts.kind;
+    handleThrottledSearch();
+  });
 </script>
 
 <div
@@ -160,9 +204,9 @@
         }
 
         target.value = target.value.replace(/[^a-zA-Z0-9 '-]/g, "");
-        searchText = target.value.trim();
+        searchOpts.text = target.value.trim();
 
-        if (searchText == "") {
+        if (searchOpts.text == "") {
           return;
         }
 
@@ -196,18 +240,49 @@
   </div>
 </div>
 <div
-  class="items-center justify-center space-y-0 max-h-[93dvh] h-[93dvh] overflow-y-scroll pb-[20dvh] rounded-t-xl bg-transparent no-scrollbar w-full {searchRes.loading
+  class="relative items-center justify-center space-y-0 max-h-[93dvh] h-[93dvh] overflow-y-scroll pb-[20dvh] rounded-t-xl bg-transparent no-scrollbar w-full {searchRes.loading
     ? 'animate-pulse'
     : ''}"
   style="display: {$ViewInfo.tab == TabEnum.search ? 'block' : 'none'};"
   transition:fade={{ duration: 1000 }}
 >
   {#if searchRes.songs}
-    <h2
+    <div class="py-1 px-2 flex flex-col items-end">
+      <ul class="space-x-2">
+        <!-- <div class="inline-flex h-9 flex-row items-center">
+          <p class="text-[12px]">
+            {#if searchRes.loading}
+              <span class="animate-pulse"
+                >Loading(Client -> Svara Servers).
+              </span>
+            {:else}
+              <sup>{searchRes.songs.results.length}</sup>&frasl;<sub
+                >{searchRes.songs.total}</sub
+              >
+            {/if}
+          </p>
+          <span
+            class="text-[8px] text-black/80 dark:text-white/80 bg-black/5 dark:bg-white/5 p-0.5 rounded-xs"
+            >Powered by JioSaavn</span
+          >
+        </div> -->
+        {#each [{ name: "songs", value: "track" }, { name: "playlists", value: "playlist" }] as item}
+          <button
+            onclick={() =>
+              (searchOpts.kind = item.value as "track" | "playlist")}
+            class="py-0 px-2 text-sm h-9 rounded-md ring-1 ring-black/20 dark:ring-white/20 {searchOpts.kind ==
+            item.value
+              ? 'bg-black/20 dark:bg-white/20'
+              : 'bg-black/5 dark:bg-white/5'}">{item.name}</button
+          >
+        {/each}
+      </ul>
+    </div>
+    <!-- <h2
       class="text-black dark:text-white font-medium w-dvw text-[9px] font-mono mt-2 px-2 select-none"
     >
       {#if searchRes.loading}
-        <span class="animate-pulse">Loading(proxy -> server). </span>
+        <span class="animate-pulse">Loading(Client -> Svara Servers). </span>
       {:else}
         showing {searchRes.songs.results.length} result{searchRes.songs.results
           .length > 1
@@ -223,37 +298,46 @@
         class="text-[8px] text-black/80 dark:text-white/80 bg-black/5 dark:bg-white/5 p-0.5 rounded-xs"
         >Powered by JioSaavn</span
       >
-    </h2>
-    {#each searchRes.songs.results || [] as track (track.id)}
-      <Track
-        {track}
-        playing={usePlayer.info.meta.id == track.id}
-        onPlay={async () => {
-          const mediaURLs = await JioSaavnSource.getDownloadableURLs(track);
+    </h2> -->
+    {#if searchOpts.kind == "playlist" && searchRes.playlists}
+      {#each searchRes.playlists.results || [] as track (track.id)}
+        <Track {track} />
+      {/each}
+    {:else if searchOpts.kind == "track"}
+      {#each searchRes.songs.results || [] as track (track.id)}
+        <Track
+          {track}
+          playing={usePlayer.info.meta.id == track.id}
+          onPlay={async () => {
+            const mediaURLs = await JioSaavnSource.getDownloadableURLs(track);
 
-          if (mediaURLs.length == 0) {
-            console.error("no media url found for track");
-            return;
-          }
+            if (mediaURLs.length == 0) {
+              console.error("no media url found for track");
+              return;
+            }
 
-          const highestQURL = mediaURLs.at(-1)?.url;
-          usePlayer.playback.play(
-            {
-              id: track.id,
-              title: track.title,
-              img: track.image.replace("http://", "https://"),
-              artist: track.more_info.artistMap.primary_artists[0].name || "",
-              album: track.more_info.album || "",
-            },
-            highestQURL
-          );
-        }}
-        onMoreActions={() => {
-          $ViewInfo.sheets.actions = true;
-          $ViewInfo.select.track = track;
-        }}
-      />
-    {/each}
+            const highestQURL = mediaURLs.at(-1)?.url;
+            usePlayer.playback.play(
+              {
+                id: track.id,
+                title: track.title,
+                img: track.image
+                  .replace("http://", "https://")
+                  .replace("150x150", "500x500"),
+                artist: track.more_info.artistMap.primary_artists[0].name || "",
+                album: track.more_info.album || "",
+                color: "#7008e7",
+              },
+              highestQURL
+            );
+          }}
+          onMoreActions={() => {
+            $ViewInfo.sheets.actions = true;
+            $ViewInfo.select.track = track;
+          }}
+        />
+      {/each}
+    {/if}
   {:else}
     <div class="px-2">
       <h1
