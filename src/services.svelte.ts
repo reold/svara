@@ -1,10 +1,3 @@
-//FIXME: remove ! in production
-// export const PROXY_URL =
-//   (!import.meta.env.DEV
-//     ? "http://localhost:3000/"
-//     : // "https://vercel-cors-anywhere-6k64bb3kj-reolds-projects.vercel.app/"
-//       //"https://vercel-cors-anywhere-k6txcvnye-reolds-projects.vercel.app/"
-//       "https://vercel-cors-anywhere-one.vercel.app/") + "api?url=";
 import Peer from "peerjs";
 import type { DataConnection } from "peerjs";
 
@@ -267,14 +260,13 @@ export const p2pServices = {
   },
 
   join: () => {
+    if (!P2PInfo.room.id) throw new Error("Room ID is required");
+
     const conn = P2PInfo.peer?.connect(P2PInfo.room.id, {
       metadata: { username: P2PInfo.user.name },
     });
-    if (!conn) {
-      throw new Error("Connection to Peer failed");
-    }
+    if (!conn) throw new Error("Connection to Peer failed");
 
-    console.log("connection open");
     conn.on("open", () => {
       console.log("handling ocnnection");
       p2pServices.handleConnection(conn);
