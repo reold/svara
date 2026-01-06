@@ -10,6 +10,7 @@
   import { ViewInfo, TabEnum } from "../../store.svelte";
   import { stringHelpers } from "../../utils.svelte";
   import Lyrics from "./Lyrics.svelte";
+  import Navbar from "./Navbar.svelte";
 
   let { jamInfo = { create: true } } = $props();
 
@@ -22,12 +23,6 @@
   });
 
   onMount(() => {
-    // mazhaneer thullikal
-    // prettier-ignore
-    // selection = {"show":{"moreActions":true,"selectPlaylist":true,"track":false},"track":{"id":"BNepbzkO","title":"Mazhaneer Thullikal (Male)","subtitle":"Ratheesh Vegha - Beautiful","header_desc":"","type":"song","perma_url":"https://www.jiosaavn.com/song/mazhaneer-thullikal-male/MiYOQRZKXHw","image":"https://c.saavncdn.com/661/Beautiful-Malayalam-2011-150x150.jpg","language":"malayalam","year":"2011","play_count":"508674","explicit_content":"0","list_count":"0","list_type":"","list":"","more_info":{"music":"Ratheesh Vegha","album_id":"2270793","album":"Beautiful","label":"Manorama Music","label_id":null,"origin":"search","is_dolby_content":false,"320kbps":"true","encrypted_media_url":"ID2ieOjCrwfgWvL5sXl4B1ImC5QfbsDyzLkRhUCnyMSrd5OfE6i+F59yE/IAvdChVkbfMMRFGCriXn+o5YqnqBw7tS9a8Gtq","encrypted_cache_url":"","encrypted_drm_cache_url":"","encrypted_drm_media_url":"ID2ieOjCrwdjlkMElYlzWCptgNdUpWD88vPsJDa+oT1pyi9JlQyJCRMAqF0yPkq68khkXJqRi68G9fbMcilAto92mytrdt3FDnQW0nglPS4=","album_url":"https://www.jiosaavn.com/album/beautiful/cF7W1d7pSPQ_","duration":"252","rights":{"code":"0","cacheable":"true","delete_cached_object":"false","reason":""},"cache_state":"false","has_lyrics":"false","lyrics_snippet":"","starred":"false","copyright_text":"©  2011 Manorama Music","artistMap":{"primary_artists":[{"id":"642572","name":"Ratheesh Vegha","role":"primary_artists","image":"https://c.saavncdn.com/722/Thrissur-Pooram-Malayalam-2019-20191204104536-150x150.jpg","type":"artist","perma_url":"https://www.jiosaavn.com/artist/ratheesh-vegha-songs/Lh9gmDkAId8_"}],"featured_artists":[],"artists":[{"id":"642572","name":"Ratheesh Vegha","role":"music","image":"https://c.saavncdn.com/722/Thrissur-Pooram-Malayalam-2019-20191204104536-150x150.jpg","type":"artist","perma_url":"https://www.jiosaavn.com/artist/ratheesh-vegha-songs/Lh9gmDkAId8_"},{"id":"455279","name":"Unni Menon","role":"singer","image":"https://c.saavncdn.com/artists/Unni_Menon_150x150.jpg","type":"artist","perma_url":"https://www.jiosaavn.com/artist/unni-menon-songs/8a4GOKXGRG0_"},{"id":"546982","name":"Anoop Menon","role":"lyricist","image":"https://c.saavncdn.com/artists/Anoop_Menon_150x150.jpg","type":"artist","perma_url":"https://www.jiosaavn.com/artist/anoop-menon-songs/loudek4uw6c_"},{"id":"546982","name":"Anoop Menon","role":"starring","image":"https://c.saavncdn.com/artists/Anoop_Menon_150x150.jpg","type":"artist","perma_url":"https://www.jiosaavn.com/artist/anoop-menon-songs/loudek4uw6c_"},{"id":"466229","name":"Jayasurya","role":"starring","image":"https://c.saavncdn.com/artists/Jayasurya_004_20230810075306_150x150.jpg","type":"artist","perma_url":"https://www.jiosaavn.com/artist/jayasurya-songs/ClaxT,LdtOg_"},{"id":"546983","name":"Meghana Raj","role":"starring","image":"https://c.saavncdn.com/artists/Meghana_Raj_002_20230810075626_150x150.jpg","type":"artist","perma_url":"https://www.jiosaavn.com/artist/meghana-raj-songs/2reQlxATfqE_"}]},"release_date":null,"label_url":"/label/manorama-music-albums/","vcode":"010910860812344","vlink":"https://jiotunepreview.jio.com/content/Converted/010910860768868.mp3","triller_available":false,"request_jiotune_flag":false,"webp":"false"},"button_tooltip_info":[]}}
-    // chandhanamani
-    // prettier-ignore
-    // selection = {"show":{"moreActions":true,"selectPlaylist":true,"track":false},"track":{"id":"V-6VQHsD","title":"Chandhanamani","subtitle":"M.G. Radhakrishnan - Praja (Original Motion Picture Soundtrack)","header_desc":"","type":"song","perma_url":"https://www.jiosaavn.com/song/chandhanamani/JkVdZyV4RHc","image":"https://c.saavncdn.com/479/Praja-Original-Motion-Picture-Soundtrack-Malayalam-2001-20240621154349-150x150.jpg","language":"malayalam","year":"2001","play_count":"382514","explicit_content":"0","list_count":"0","list_type":"","list":"","more_info":{"music":"M.G. Radhakrishnan","album_id":"55455636","album":"Praja (Original Motion Picture Soundtrack)","label":"Satyam Audios","label_id":null,"origin":"search","is_dolby_content":false,"320kbps":"true","encrypted_media_url":"ID2ieOjCrwfgWvL5sXl4B1ImC5QfbsDyErKzmZFBZk9d1dfZV1MN/PTkSazNnAvUSvjZpqWHIhELUQ5/nj93Qhw7tS9a8Gtq","encrypted_cache_url":"","encrypted_drm_cache_url":"","encrypted_drm_media_url":"ID2ieOjCrwdjlkMElYlzWCptgNdUpWD8e6IydqwAjaM08x2sHzg6Z89KnXRFxH6KO3RXG2ttrmkiocWbDOwL/o92mytrdt3FDnQW0nglPS4=","album_url":"https://www.jiosaavn.com/album/praja-original-motion-picture-soundtrack/LVzjTAFYr90_","duration":"328","rights":{"code":"0","cacheable":"true","delete_cached_object":"false","reason":""},"cache_state":"false","has_lyrics":"false","lyrics_snippet":"","starred":"false","copyright_text":"(P) 2001 Sony Music Entertainment India Pvt. Ltd. Under Exclusive Distribution For Satyam Audios","artistMap":{"primary_artists":[{"id":"491876","name":"M.G. Radhakrishnan","role":"primary_artists","image":"https://c.saavncdn.com/artists/M_G_Radhakrishnan_001_20201212113203_150x150.jpg","type":"artist","perma_url":"https://www.jiosaavn.com/artist/m.g.-radhakrishnan-songs/aS8gwHoxDCs_"}],"featured_artists":[],"artists":[{"id":"491876","name":"M.G. Radhakrishnan","role":"music","image":"https://c.saavncdn.com/artists/M_G_Radhakrishnan_001_20201212113203_150x150.jpg","type":"artist","perma_url":"https://www.jiosaavn.com/artist/m.g.-radhakrishnan-songs/aS8gwHoxDCs_"},{"id":"491876","name":"M.G. Radhakrishnan","role":"singer","image":"https://c.saavncdn.com/artists/M_G_Radhakrishnan_001_20201212113203_150x150.jpg","type":"artist","perma_url":"https://www.jiosaavn.com/artist/m.g.-radhakrishnan-songs/aS8gwHoxDCs_"},{"id":"491878","name":"M.G. Sreekumar","role":"singer","image":"https://c.saavncdn.com/artists/M_G_Sreekumar_150x150.jpg","type":"artist","perma_url":"https://www.jiosaavn.com/artist/m.g.-sreekumar-songs/Cw59Aq6xqlA_"},{"id":"546329","name":"Gireesh Puthenchery","role":"lyricist","image":"https://c.saavncdn.com/artists/Gireesh_Puthenchery_000_20230217092415_150x150.jpg","type":"artist","perma_url":"https://www.jiosaavn.com/artist/gireesh-puthenchery-songs/dLfixABGlzA_"},{"id":"467088","name":"Mohanlal","role":"starring","image":"https://c.saavncdn.com/artists/Mohanlal_004_20180706155810_150x150.jpg","type":"artist","perma_url":"https://www.jiosaavn.com/artist/mohanlal-songs/L23yyTucAW4_"},{"id":"666494","name":"Aiswaraya","role":"starring","image":"","type":"artist","perma_url":"https://www.jiosaavn.com/artist/aiswaraya-songs/SCi-,dG2buI_"}]},"release_date":null,"label_url":"/label/satyam-audios-albums/","vcode":"010910090266099","vlink":"https://jiotunepreview.jio.com/content/Converted/010910090278730.mp3","triller_available":false,"request_jiotune_flag":false,"webp":"true"},"button_tooltip_info":[]}}
     switchView(TabEnum.search);
   });
 
@@ -292,37 +287,9 @@
         </div>
       </div>
     {/if}
-    <div
-      class="h-[10dvh] text-xs w-dvw bg-black/5 dark:bg-white/5 rounded-t-md backdrop-brightness-80 dark:backdrop-brightness-20 backdrop-blur-lg flex flex-row items-start justify-center overflow-hidden"
-      transition:fly={{ duration: 500, y: 100 }}
-    >
-      <!-- <div
-        class="absolute left-0 top-0 w-1/3 h-3/4 z-0 bg-black/5 dark:bg-white/5 rounded-md text-xs"
-      ></div> -->
-      {#each Object.keys(tab.views) as item}
-        <button
-          class="w-full flex flex-col items-center justify-center {$ViewInfo.tab ==
-          item
-            ? 'text-violet-600 dark:text-violet-500 font-medium'
-            : ''}"
-          onclick={() => {
-            switchView(item as TabEnum);
-          }}
-          ><svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            class="size-7 {$ViewInfo.tab == item
-              ? 'fill-current'
-              : `stroke-current stroke-[1.5px] fill-none`}"
-          >
-            {@html $ViewInfo.tab == item
-              ? tab.views[item].path.selected
-              : tab.views[item].path.default}
-          </svg>
-          {item}</button
-        >
-      {/each}
-    </div>
+
+    <!-- bottom navbar -->
+    <Navbar {tab} {switchView} />
   </div>
   {#if $ViewInfo.sheets.track}
     <div
