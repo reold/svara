@@ -591,6 +591,7 @@
 
         {#if usePlayer.info.meta.lyrics}
           <Lyrics
+            color={usePlayer.info.meta.color}
             content={usePlayer.info.meta.lyrics.content}
             bind:time={usePlayer.info.t}
             handleSeek={(time: number) => {

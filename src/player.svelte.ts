@@ -1,4 +1,9 @@
 import crypto from "node-forge";
+// @ts-ignore
+import ColorThief from "colorthief";
+import { colorHelpers } from "./utils.svelte";
+
+const colorThief = new ColorThief();
 
 interface MetaT {
   id: string;
@@ -6,6 +11,7 @@ interface MetaT {
   img: string;
   artist: string;
   album: string;
+  color: string;
   lyrics?: {
     type: "plain" | "synced";
     content: { time: number; text: string }[];
@@ -37,6 +43,7 @@ const PlayerInfo = $state({
     img: "",
     artist: "",
     album: "",
+    color: "#7008e7",
     lyrics: {
       type: "plain",
       content: [],
@@ -114,6 +121,23 @@ export const usePlayer = {
       url = url.replace("http://", "https://");
 
       PlayerInfo.meta = { ...PlayerInfo.meta, ...meta };
+
+      // set color meta
+      {
+        const img = new Image();
+
+        img.addEventListener("load", function () {
+          const RGB: [number, number, number] = colorThief.getColor(img);
+          let HSL = colorHelpers.rgb.toHsl(...RGB);
+          HSL[2] = 0.3;
+          // const darkHSL = colorHelpers.hsl.darken(HSL, 0.1);
+          const HEX = colorHelpers.hsl.toHex(...HSL);
+          PlayerInfo.meta.color = HEX;
+        });
+
+        img.crossOrigin = "Anonymous";
+        img.src = PlayerInfo.meta.img;
+      }
 
       // Reset audio element
       PlayerInfo.audioElm.load();
@@ -332,7 +356,10 @@ export const usePlayer = {
               // Fallback: if the line doesn't match the expected timestamp format.
               return { time: 0, text: line };
             })
-            .filter((entry) => entry.text && entry.text.trim() !== "");
+            .filter(
+              (entry: { text: string }) =>
+                entry.text && entry.text.trim() !== ""
+            );
 
           PlayerInfo.meta.lyrics = {
             type: "synced",
