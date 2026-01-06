@@ -2,19 +2,12 @@ import crypto from "node-forge";
 
 import { dataFetch, PROXY_URL } from "./services.svelte";
 import type { TrackT } from "./player.svelte";
-
-const enum AudioQuality {
-  Q12 = "12kbps",
-  Q48 = "48kbps",
-  Q96 = "96kbps",
-  Q160 = "160kbps",
-  Q320 = "320kbps",
-}
+import { AudioQuality } from "./library/constants";
 
 const BaseSource = {
   host: "" as string,
   headers: {},
-  query: async (query: string) => {},
+  query: async (query: string, opt: { kind: "track" | "playlist" }) => {},
   getDownloadableURL: async (track: {}) => {},
   getStreamURL: async (track: {}) => {},
   helpers: {},
@@ -70,7 +63,7 @@ JioSaavnSource.helpers.decryptURL = (
 };
 
 JioSaavnSource.helpers.toTrackT = async (
-  track
+  track: any
 ): Promise<TrackT | undefined> => {
   const mediaURLs = await JioSaavnSource.getDownloadableURLs(track);
 
@@ -87,20 +80,37 @@ JioSaavnSource.helpers.toTrackT = async (
       img: track.image.replace("http://", "https://"),
       artist: track.more_info.artistMap.primary_artists[0].name || "",
       album: track.more_info.album || "",
+      color: "#7008e7",
     },
     url: highestQURL,
   };
 };
 
-JioSaavnSource.query = async (query: string) => {
-  let data = await dataFetch(
-    `${JioSaavnSource.host}${encodeURIComponent(
-      `?p=1&q=${query}&_format=json&_marker=0&api_version=4&ctx=web6dot0&n=30&__call=search.getResults`
-    )}`,
-    JSON.stringify({ headers: JioSaavnSource.headers, method: "GET" })
-  );
-
-  return data;
+JioSaavnSource.query = async (
+  query: string,
+  opt: { kind: "track" | "playlist" } = { kind: "track" }
+) => {
+  let data;
+  switch (opt.kind) {
+    case "track":
+      data = await dataFetch(
+        `${JioSaavnSource.host}${encodeURIComponent(
+          `?p=1&q=${query}&_format=json&_marker=0&api_version=4&ctx=web6dot0&n=30&__call=search.getResults`
+        )}`,
+        JSON.stringify({ headers: JioSaavnSource.headers, method: "GET" })
+      );
+      return data;
+    case "playlist":
+      data = await dataFetch(
+        `${JioSaavnSource.host}${encodeURIComponent(
+          `?p=1&q=${query}&_format=json&_marker=0&api_version=4&ctx=web6dot0&n=30&__call=search.getPlaylistResults`
+        )}`,
+        JSON.stringify({ headers: JioSaavnSource.headers, method: "GET" })
+      );
+      return data;
+    default:
+      throw new Error("Invalid query kind");
+  }
 };
 
 JioSaavnSource.getDownloadableURLs = async (
