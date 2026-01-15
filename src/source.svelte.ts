@@ -86,6 +86,16 @@ JioSaavnSource.helpers.toTrackT = async (
   };
 };
 
+JioSaavnSource.helpers.fetchPlaylist = async (id: string) => {
+  let data = await dataFetch(
+    `${JioSaavnSource.host}${encodeURIComponent(
+      `?p=1&listid=${id}&_format=json&_marker=0&api_version=4&ctx=web6dot0&n=30&__call=playlist.getDetails`
+    )}`,
+    JSON.stringify({ headers: JioSaavnSource.headers, method: "GET" })
+  );
+  return data;
+};
+
 JioSaavnSource.query = async (
   query: string,
   opt: { kind: "track" | "playlist" } = { kind: "track" }

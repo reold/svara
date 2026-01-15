@@ -17,7 +17,7 @@
       {
         id: $ViewInfo.select.track.id,
         title: $ViewInfo.select.track.title,
-        img: $ViewInfo.select.track.image.replace("http://", "https://"),
+        img: $ViewInfo.select.track.image,
         artist:
           $ViewInfo.select.track.more_info.artistMap.primary_artists[0].name ||
           "",

@@ -27,7 +27,7 @@
           firstname: string;
           lastname: string;
         };
-      };
+      }[];
     };
     songs?: {
       query: string;
@@ -300,8 +300,57 @@
       >
     </h2> -->
     {#if searchOpts.kind == "playlist" && searchRes.playlists}
-      {#each searchRes.playlists.results || [] as track (track.id)}
-        <Track {track} />
+      {#each searchRes.playlists.results || [] as playlist (playlist.id)}
+        <Track
+          track={playlist}
+          onPlay={async () => {
+            const data: { list: typeof searchRes.songs.results } =
+              await JioSaavnSource.helpers.fetchPlaylist(playlist.id);
+
+            data.list.forEach(async (track, ti) => {
+              const mediaURLs = await JioSaavnSource.getDownloadableURLs(track);
+
+              if (mediaURLs.length == 0) {
+                console.error("no media url found for track");
+                return;
+              }
+              const highestQURL = mediaURLs.at(-1)?.url;
+              track.image = track.image
+                .replace("http://", "https://")
+                .replace("150x150", "500x500");
+
+              switch (ti) {
+                case 0:
+                  usePlayer.playback.play(
+                    {
+                      id: track.id,
+                      title: track.title,
+                      img: track.image,
+                      artist:
+                        track.more_info.artistMap.primary_artists[0].name || "",
+                      album: track.more_info.album || "",
+                      colors: { primary: "#7008e7", secondary: "#7008e7" },
+                    },
+                    highestQURL
+                  );
+                  break;
+
+                default:
+                  await usePlayer.playback.appendQueue(
+                    {
+                      id: track.id,
+                      title: track.title,
+                      img: track.image,
+                      artist:
+                        track.more_info.artistMap.primary_artists[0].name || "",
+                      album: track.more_info.album || "",
+                    },
+                    highestQURL
+                  );
+              }
+            });
+          }}
+        />
       {/each}
     {:else if searchOpts.kind == "track"}
       {#each searchRes.songs.results || [] as track (track.id)}
@@ -326,7 +375,7 @@
                   .replace("150x150", "500x500"),
                 artist: track.more_info.artistMap.primary_artists[0].name || "",
                 album: track.more_info.album || "",
-                color: "#7008e7",
+                colors: { primary: "#7008e7", secondary: "#7008e7" },
               },
               highestQURL
             );
