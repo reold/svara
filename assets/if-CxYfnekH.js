@@ -1,0 +1,1 @@
+import{Z as A,a0 as E,ad as i,a1 as u,ae as o,aA as I}from"./index-DfP8wKoi.js";function T(_,b,[n,h]=[0,0]){var t=_,a=null,e=null,f=I,v=n>0?E:0,s=!1;const p=(r,l=!0)=>{s=!0,c(l,r)},c=(r,l)=>{f!==(f=r)&&(f?(a?i(a):l&&(a=u(()=>l(t))),e&&o(e,()=>{e=null})):(e?i(e):l&&(e=u(()=>l(t,[n+1,h]))),a&&o(a,()=>{a=null})))};A(()=>{s=!1,b(p),s||c(null,null)},v)}export{T as i};

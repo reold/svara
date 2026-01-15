@@ -1,0 +1,1 @@
+import{u as h,a6 as k,v as x,aj as S,ax as T}from"./index-DfP8wKoi.js";function t(r,i){return r===i||(r==null?void 0:r[T])===i}function q(r={},i,a,c){return h(()=>{var f,s;return k(()=>{f=s,s=[],x(()=>{r!==a(...s)&&(i(r,...s),f&&t(a(...f),r)&&i(null,...f))})}),()=>{S(()=>{s&&t(a(...s),r)&&i(null,...s)})}}),r}export{q as b};
