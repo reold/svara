@@ -295,8 +295,10 @@
     <div
       in:fly={{ duration: 500, y: 750 }}
       out:fly={{ duration: 500, y: 750 }}
-      class="absolute top-0 left-0 w-dvw h-dvh bg-white/85 dark:bg-zinc-900/85 backdrop-blur-md overflow-y-scroll no-scrollbar"
+      class="absolute top-0 left-0 w-dvw h-dvh backdrop-blur-lg overflow-y-scroll no-scrollbar"
+      style="background-color: {usePlayer.info.meta.colors.secondary}85;"
     >
+      <!-- bg-white/85 dark:bg-zinc-900/85 -->
       <div class="w-full flex flex-col items-center relative">
         <div
           class="flex flex-row justify-between w-full py-[2.5dvw] px-[2.5dvw] sticky top-0 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md z-10"
@@ -337,12 +339,7 @@
             </svg>
           </button>
         </div>
-        <!-- <img
-          src={usePlayer.info.meta.img}
-          alt="song thumbnail"
-          class="w-[80dvw] max-h-[50dvh] object-contain rounded-md mt-[2.5dvh] rounded-md"
-          style="view-transition-name: player-thumbnail;"
-        /> -->
+
         <div
           class="w-[80dvw] max-w-[500px] max-h-[70dvh] rounded-md mt-[10dvh] overflow-hidden flex items-center justify-center"
         >
@@ -558,7 +555,7 @@
 
         {#if usePlayer.info.meta.lyrics}
           <Lyrics
-            color={usePlayer.info.meta.color}
+            color={usePlayer.info.meta.colors.primary}
             content={usePlayer.info.meta.lyrics.content}
             bind:time={usePlayer.info.t}
             handleSeek={(time: number) => {

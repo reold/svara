@@ -11,7 +11,10 @@ interface MetaT {
   img: string;
   artist: string;
   album: string;
-  color: string;
+  colors: {
+    primary: string;
+    secondary: string;
+  };
   lyrics?: {
     type: "plain" | "synced";
     content: { time: number; text: string }[];
@@ -43,7 +46,7 @@ const PlayerInfo = $state({
     img: "",
     artist: "",
     album: "",
-    color: "#7008e7",
+    colors: { primary: "#7008e7", secondary: "#7008e7" },
     lyrics: {
       type: "plain",
       content: [],
@@ -127,12 +130,15 @@ export const usePlayer = {
         const img = new Image();
 
         img.addEventListener("load", function () {
-          const RGB: [number, number, number] = colorThief.getColor(img);
+          const RGB: [number, number, number] = colorThief.getColor(img, 5);
           let HSL = colorHelpers.rgb.toHsl(...RGB);
+
+          PlayerInfo.meta.colors.secondary = colorHelpers.hsl.toHex(...HSL);
+
           HSL[2] = 0.3;
           // const darkHSL = colorHelpers.hsl.darken(HSL, 0.1);
           const HEX = colorHelpers.hsl.toHex(...HSL);
-          PlayerInfo.meta.color = HEX;
+          PlayerInfo.meta.colors.primary = HEX;
         });
 
         img.crossOrigin = "Anonymous";
